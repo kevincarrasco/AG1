@@ -1,0 +1,115 @@
+##quick sort
+
+def quick_sort(A):
+  if len(A) == 1:
+    return A
+  if len(A) == 2:
+    return [min(A), max(A)]
+  
+  IZQ=[]
+  DER=[]
+  
+  pivote = (A[0]+ A[1] + A[2])/3
+  
+  for i in A:
+    if i <= pivote :
+      IZQ.append(i)
+    else:
+      DER.append(i)
+      
+  return quick_sort(IZQ) + quick_sort(DER)
+
+def QS(A): 
+  return quick_sort(A)
+
+print(QS(A))
+
+from time import time
+#Función para calcular el tiempo de ejecución
+def calcular_tiempo(f):
+   
+    def wrapper(*args, **kwargs):        
+        inicio = time()       
+        resultado = f(*args, **kwargs)       
+        tiempo = time() - inicio
+        print("Tiempo de ejecución para algoritmo: "+str(tiempo))
+        return resultado
+    
+    return wrapper
+from time import time
+
+SISTEMA = [25, 10, 5, 1]
+
+@calcular_tiempo
+def cambio_monedas(CANTIDAD, SISTEMA ):
+  SOLUCION =[0 for i in range(len(SISTEMA))]
+ 
+  VALOR_ACUMULADO = 0
+  
+  for i in range(len(SISTEMA)):
+    monedas = int((CANTIDAD - VALOR_ACUMULADO)/SISTEMA[i])
+    
+    SOLUCION[i] = monedas
+    
+    VALOR_ACUMULADO += monedas*SISTEMA[i]
+    
+    
+    if CANTIDAD == VALOR_ACUMULADO:
+      return SOLUCION
+    
+ 
+  
+  
+cambio_monedas(77, SISTEMA)
+
+
+
+N=8
+
+solucion = [0 for i in range(N) ]
+
+etapa=0
+
+def es_prometedora(SOLUCION,etapa):
+  for i in range(etapa+1):
+    if SOLUCION.count(SOLUCION[i]) > 1:       return False
+  
+    #Verifica las diagonales
+    for j in range(i+1, etapa +1 ):
+      if abs(i-j) == abs(SOLUCION[i]-SOLUCION[j]) : return False
+  return True
+
+
+def escribe(S):
+  n = len(S)
+  for x in range(n):
+    print("")
+    for i in range(n):
+      if solucion[i] == x+1:
+        print(" X " , end="")
+      else:
+        print(" - ", end="")
+
+
+def reinas(N,solucion,etapa): #Tamaño del tablero
+  
+  for i in range(1,N+1):
+    solucion[etapa] = i
+    
+    #print(solucion)
+    if es_prometedora(solucion,etapa):
+      if etapa == N-1 :
+        print("\n\nLa solución es:")
+        print(solucion)
+        escribe(solucion)
+      else:
+        #print("Es prometedora\n###################")
+        reinas(N,solucion,etapa+1)
+    else:
+      #print("NO PROMETEDORA\n###################")
+      None
+      
+    solucion[etapa] = 0
+    
+
+reinas(N,solucion,etapa)
